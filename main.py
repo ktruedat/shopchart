@@ -1,7 +1,7 @@
+import pandas as pd
 import streamlit as st
 
 from api.controller.product import ProductController
-from api.models import Product
 from api.repository.product import ProductRepository
 
 product_repository = ProductRepository()
@@ -22,8 +22,7 @@ print(df)
 # Page layout
 st.title('Shop Marketing Insights')
 
-# Sidebar menu
-crud_menu = st.sidebar.selectbox('Select a section', ['Add Product', 'Get Product', 'Update Product', 'Delete Product'])
+crud_menu = st.sidebar.selectbox('Select a section', ['Add Product', 'Get All Products', 'Update Product', 'Delete Product'])
 
 if crud_menu == 'Add Product':
     st.subheader('Add Product Section')
@@ -32,9 +31,9 @@ if crud_menu == 'Add Product':
     product_price = st.number_input('Enter Product Price:')
 
     categories = {1: 'Category 1', 2: 'Category 2', 3: 'Category 3'}
-    selected_category_id = st.selectbox('Select Category:', list(categories.keys()))
+    selected_category_id = st.selectbox('Select Category:', list(categories.values()))
     producers = {1: 'Producer 1', 2: 'Producer 2', 3: 'Producer 3'}
-    selected_producer_id = st.selectbox('Select Producer:', list(producers.keys()))
+    selected_producer_id = st.selectbox('Select Producer:', list(producers.values()))
 
     if st.button('Add Product'):
         product_data = {
@@ -49,12 +48,24 @@ if crud_menu == 'Add Product':
 
 elif crud_menu == 'Update Product':
     st.subheader('Update Product Section')
+
     product_id = st.number_input('Enter Product ID to update:')
     updated_product_name = st.text_input('Enter Updated Product Name:')
     updated_product_price = st.number_input('Enter Updated Product Price:')
+
+    categories = {1: 'Category 1', 2: 'Category 2', 3: 'Category 3'}
+    selected_category_id = st.selectbox('Select Category:', list(categories.values()))
+    producers = {1: 'Producer 1', 2: 'Producer 2', 3: 'Producer 3'}
+    selected_producer_id = st.selectbox('Select Producer:', list(producers.values()))
     if st.button('Update Product'):
-        result = product_controller.update_product(product_id, {'name': updated_product_name,
-                                                                'price': updated_product_price})
+        product_data = {
+            'Name': updated_product_name,
+            'CategoryID': selected_category_id,
+            'Price': updated_product_price,
+            'ProducerID': selected_producer_id
+        }
+        print(product_data)
+        result = product_controller.update_product(product_id, product_data)
         st.success(result)
 
 elif crud_menu == 'Delete Product':
@@ -63,6 +74,17 @@ elif crud_menu == 'Delete Product':
     if st.button('Delete Product'):
         result = product_controller.delete_product(product_id_to_delete)
         st.success(result)
+
+elif crud_menu == 'Get All Products':
+    st.subheader('Get All Products Section')
+
+    all_products = product_controller.get_all_products()
+
+    if all_products:
+        st.table(all_products)
+    else:
+        st.info("No products found.")
+
 
 # Sidebar menu
 menu = st.sidebar.selectbox('Select a section',

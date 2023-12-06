@@ -18,6 +18,19 @@ class ProductRepository(IProductRepository):
 
         return products
 
+    def get_products(self):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        res_products = session.query(Product).all()
+        session.close()
+
+        print(f"HERE {res_products}")
+
+        return res_products
+
+
     def add_product(self, product):
         Base.metadata.bind = engine
         Session = sessionmaker(bind=engine)

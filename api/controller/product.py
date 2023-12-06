@@ -7,6 +7,10 @@ class IProductRepository(ABC):
         pass
 
     @abstractmethod
+    def get_products(self):
+        pass
+
+    @abstractmethod
     def add_product(self, product):
         pass
 
@@ -28,6 +32,9 @@ class ProductController:
 
     def get_product(self, product_id: int):
         return self.product_repository.get_product(product_id)
+
+    def get_all_products(self):
+        return self.product_repository.get_products()
 
     def update_product(self, product_id, updated_product):
         return self.product_repository.update_product(product_id, updated_product)

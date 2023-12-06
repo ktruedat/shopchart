@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 
@@ -36,6 +38,7 @@ class Category(Base):
     CategoryName = Column(String(255))
 
 
+@dataclass
 class Product(Base):
     __tablename__ = 'Products'
     ProductID = Column(Integer, primary_key=True)
@@ -53,6 +56,5 @@ class Promotion(Base):
     StartDate = Column(Date)
     EndDate = Column(Date)
 
-
-Producer.products = relationship("Product", order_by=Product.ProductID, back_populates="producer")
-Producer = relationship("Producer", back_populates="products")
+# Producer.products = relationship("Product", order_by=Product.ProductID, back_populates="producer")
+# Producer = relationship("Producer", back_populates="products")
