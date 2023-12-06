@@ -1,5 +1,5 @@
 CREATE TABLE `Customers` (
-                             `CustomerID` int NOT NULL,
+                             `CustomerID` int NOT NULL AUTO_INCREMENT,
                              `Name` varchar(255) DEFAULT NULL,
                              `Email` varchar(255) DEFAULT NULL,
                              `Phone` varchar(20) DEFAULT NULL,
@@ -7,14 +7,27 @@ CREATE TABLE `Customers` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Producers` (
-                             `ProducerID` int NOT NULL,
+                             `ProducerID` int NOT NULL AUTO_INCREMENT,
                              `ProducerName` varchar(255) DEFAULT NULL,
                              `ProducerLocation` varchar(255) DEFAULT NULL,
                              PRIMARY KEY (`ProducerID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+CREATE TABLE `Products` (
+                            `ProductID` int NOT NULL AUTO_INCREMENT,
+                            `Name` varchar(255) DEFAULT NULL,
+                            `CategoryID` int DEFAULT NULL,
+                            `Price` decimal(10,2) DEFAULT NULL,
+                            `ProducerID` int DEFAULT NULL,
+                            PRIMARY KEY (`ProductID`),
+                            KEY `ProducerID` (`ProducerID`),
+                            CONSTRAINT `Products_ibfk_1` FOREIGN KEY (`ProducerID`) REFERENCES `Producers` (`ProducerID`),
+                            CONSTRAINT `Products_ibfk_2` FOREIGN KEY (`CategoryID`) REFERENCES `Categories` (`CategoryID`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+
 CREATE TABLE `Sales` (
-                         `SaleID` int NOT NULL,
+                         `SaleID` int NOT NULL AUTO_INCREMENT,
                          `ProductID` int DEFAULT NULL,
                          `CustomerID` int DEFAULT NULL,
                          `Quantity` int DEFAULT NULL,
@@ -37,20 +50,9 @@ CREATE TABLE `Categories` (
                               PRIMARY KEY (`CategoryID`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE `Products` (
-                            `ProductID` int NOT NULL,
-                            `Name` varchar(255) DEFAULT NULL,
-                            `CategoryID` int DEFAULT NULL,
-                            `Price` decimal(10,2) DEFAULT NULL,
-                            `ProducerID` int DEFAULT NULL,
-                            PRIMARY KEY (`ProductID`),
-                            KEY `ProducerID` (`ProducerID`),
-                            CONSTRAINT `Products_ibfk_1` FOREIGN KEY (`ProducerID`) REFERENCES `Producers` (`ProducerID`),
-                            CONSTRAINT `Products_ibfk_2` FOREIGN KEY (`CategoryID`) REFERENCES `Categories` (`CategoryID`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 CREATE TABLE `Promotions` (
-                              `PromotionID` int NOT NULL,
+                              `PromotionID` int NOT NULL AUTO_INCREMENT,
                               `PromotionName` varchar(255) DEFAULT NULL,
                               `DiscountPercentage` decimal(5,2) DEFAULT NULL,
                               `StartDate` date DEFAULT NULL,

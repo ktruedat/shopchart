@@ -43,7 +43,6 @@ class Product(Base):
     CategoryID = Column(Integer, ForeignKey('Categories.CategoryID'))
     Price = Column(Float)
     ProducerID = Column(Integer, ForeignKey('Producers.ProducerID'))
-    Producer = relationship("Producer", back_populates="products")
 
 
 class Promotion(Base):
@@ -56,3 +55,4 @@ class Promotion(Base):
 
 
 Producer.products = relationship("Product", order_by=Product.ProductID, back_populates="producer")
+Producer = relationship("Producer", back_populates="products")
