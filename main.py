@@ -1,27 +1,42 @@
 import pandas as pd
 import streamlit as st
 
+from api.controller.customer import CustomerController
 from api.controller.product import ProductController
+from api.repository.customer import CustomerRepository
 from api.repository.product import ProductRepository
 
+
+# Dependencies init
+# Product
 product_repository = ProductRepository()
 product_controller = ProductController(product_repository)
 
+# Customer
+customer_repository = CustomerRepository()
+customer_controller = CustomerController(customer_repository)
+
+###############################################################
+
+# Page Config
 st.set_page_config(
     page_title="shopChart",
-    page_icon="🛒",
+    page_icon="📑️",
     layout="wide"
 )
 
 st.title('Shop Marketing Insights')
 st.subheader('Understand the effectiveness of your shop marketing')
+st.title('Shop Marketing Insights')
+
+################################################################
 
 df = None
 
 print(df)
-# Page layout
-st.title('Shop Marketing Insights')
 
+
+# CRUD Menu
 crud_menu = st.sidebar.selectbox('Select a section', ['Add Product', 'Get All Products', 'Update Product', 'Delete Product'])
 
 if crud_menu == 'Add Product':
@@ -79,9 +94,10 @@ elif crud_menu == 'Get All Products':
     st.subheader('Get All Products Section')
 
     all_products = product_controller.get_all_products()
-
+    print(all_products)
     if all_products:
-        st.table(all_products)
+        products_df = pd.DataFrame([vars(product) for product in all_products])
+        st.table(products_df)
     else:
         st.info("No products found.")
 

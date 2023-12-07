@@ -26,7 +26,7 @@ class ProductRepository(IProductRepository):
         res_products = session.query(Product).all()
         session.close()
 
-        print(f"HERE {res_products}")
+        print(f"{res_products}")
 
         return res_products
 
@@ -46,16 +46,23 @@ class ProductRepository(IProductRepository):
         print(f"Product '{product['Name']}' created successfully!")
         session.close()
 
-    def update_product(self, product_id: int, updated_product: Product):
+    def update_product(self, product_id: int, updated_product):
         Base.metadata.bind = engine
         Session = sessionmaker(bind=engine)
         session = Session()
+
+        new_product = Product(
+            Name=updated_product['Name'],
+            CategoryID=updated_product['CategoryID'],
+            Price=updated_product['Price'],
+            ProducerID=updated_product['ProducerID']
+        )
         product = session.query(Product).filter_by(ProductID=product_id).first()
         if product:
-            product.Name = updated_product.Name
-            product.Price = updated_product.Price
-            product.ProducerID = updated_product.ProducerID
-            product.CategoryID = updated_product.CategoryID
+            product.Name = new_product.Name
+            product.Price = new_product.Price
+            product.ProducerID = new_product.ProducerID
+            product.CategoryID = new_product.CategoryID
             session.commit()
             print(f"Product with ID {product_id} updated successfully!")
         else:
@@ -76,5 +83,4 @@ class ProductRepository(IProductRepository):
         else:
             print(f"Product with ID {product_id} not found.")
 
-        session.commit()
         session.close()

@@ -47,6 +47,16 @@ class Product(Base):
     Price = Column(Float)
     ProducerID = Column(Integer, ForeignKey('Producers.ProducerID'))
 
+    def __init__(self, ProductID, Name, CategoryID, Price, ProducerID):
+        self.ProductID = ProductID
+        self.Name = Name
+        self.CategoryID = CategoryID
+        self.Price = Price
+        self.ProducerID = ProducerID
+
+    def __repr__(self):
+        return f"Product(ProductID={self.ProductID}, Name='{self.Name}', CategoryID={self.CategoryID}, Price={self.Price}, ProducerID={self.ProducerID})"
+
 
 class Promotion(Base):
     __tablename__ = 'Promotions'

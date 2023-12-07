@@ -1,66 +1,80 @@
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import declarative_base, sessionmaker
+from sqlalchemy.orm import sessionmaker
+from api.controller.customer import ICustomerRepository
+from api.models import *
+from dbconnection import create_connection
 
-# Replace 'your_username', 'your_password', 'your_host', and 'your_database' with your actual credentials
-db_uri = "mysql+pymysql://your_username:your_password@your_host/your_database"
-engine = create_engine(db_uri)
+engine = create_connection()
 
-Base = declarative_base()
 
-class Customer(Base):
-    __tablename__ = 'Customers'
-    CustomerID = Column(Integer, primary_key=True)
-    Name = Column(String(255))
-    Email = Column(String(255))
-    Phone = Column(String(20))
-
-# Bind the engine to the base class
-Base.metadata.bind = engine
-
-# Create a session to interact with the database
-Session = sessionmaker(bind=engine)
-session = Session()
-
-# Create (Insert) Operation
-def create_customer(name, email, phone):
-    new_customer = Customer(Name=name, Email=email, Phone=phone)
-    session.add(new_customer)
-    session.commit()
-    print("Customer created successfully!")
-
-# Read (Retrieve) Operation
-def get_customer_by_id(customer_id):
-    customer = session.query(Customer).filter_by(CustomerID=customer_id).first()
-    if customer:
-        print(f"Customer ID: {customer.CustomerID}, Name: {customer.Name}, Email: {customer.Email}, Phone: {customer.Phone}")
-    else:
-        print("Customer not found.")
-
-# Update Operation
-def update_customer_email(customer_id, new_email):
-    customer = session.query(Customer).filter_by(CustomerID=customer_id).first()
-    if customer:
-        customer.Email = new_email
+class CustomerRepository(ICustomerRepository):
+    def add_customer(self, customer):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        new_customer = Customer(
+            Name=customer['Name'],
+            Email=customer['Email'],
+            Phone=customer['Phone'],
+        )
+        session.add(new_customer)
         session.commit()
-        print("Customer email updated successfully!")
-    else:
-        print("Customer not found.")
+        session.close()
+        print("Customer created successfully!")
 
-# Delete Operation
-def delete_customer(customer_id):
-    customer = session.query(Customer).filter_by(CustomerID=customer_id).first()
-    if customer:
-        session.delete(customer)
-        session.commit()
-        print("Customer deleted successfully!")
-    else:
-        print("Customer not found.")
+    def get_customer(self, customer_id):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-# Example Usage:
-create_customer("John Doe", "john@example.com", "123-456-7890")
-get_customer_by_id(1)
-update_customer_email(1, "john.doe@example.com")
-delete_customer(1)
+        customer = session.query(Customer).filter_by(CustomerID=customer_id).first()
+        if customer:
+            print(
+                f"Customer ID: {customer.CustomerID}, Name: {customer.Name}, Email: {customer.Email}, Phone: {customer.Phone}")
+        else:
+            print("Customer not found.")
 
-# Don't forget to close the session when you're done
-session.close()
+    def get_customers(self):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        res_customers = session.query(Customer).all()
+        session.close()
+
+        print(f"{res_customers}")
+
+        return res_customers
+
+    def update_customer(self, customer_id: int, updated_customer):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        new_customer = Customer(
+            Name=updated_customer['Name'],
+            Email=updated_customer['Email'],
+            Phone=updated_customer['Phone'],
+        )
+
+        customer = session.query(Customer).filter_by(CustomerID=customer_id).first()
+        if customer:
+            customer.Name = new_customer.Name
+            customer.Email = new_customer.Email
+            customer.Phone = new_customer.Phone
+            session.commit()
+            print("Customer updated successfully!")
+        else:
+            print("Customer not found.")
+        session.close()
+
+    def delete_customer(self, customer_id: int):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
+        customer = session.query(Customer).filter_by(CustomerID=customer_id).first()
+        if customer:
+            session.delete(customer)
+            session.commit()
+            print("Customer deleted successfully!")
+        else:
+            print("Customer not found.")
+        session.close()
