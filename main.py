@@ -101,8 +101,10 @@ elif crud_menu == 'Get All Products':
     else:
         st.info("No products found.")
 
+###############################################################################
 
-# Sidebar menu
+
+# Analytics menu
 menu = st.sidebar.selectbox('Select a section',
                             ['Overview', 'Total Sales', 'Total Quantity Sold', 'Average Sale Amount', 'Total Customers',
                              'New Customers',
@@ -110,10 +112,8 @@ menu = st.sidebar.selectbox('Select a section',
                              'Average Purchase Frequency',
                              'Customer Retention Rate', 'Seasonal Trends', 'Promotion Effectiveness'])
 
-# Sections
 if menu == 'Overview':
     st.subheader('Overview Section')
-    # Display overall insights, summary charts, etc.
 
 elif menu == 'Total Sales':
     st.subheader('Total Sales Section')
@@ -166,6 +166,8 @@ elif menu == 'Seasonal Trends':
 elif menu == 'Promotion Effectiveness':
     st.subheader('Promotion Effectiveness Section')
     st.line_chart(df.set_index('Date')['PromotionEffectiveness'])
+
+##################################################################################
 
 # Footer
 st.markdown('ktruedat shopChart')
