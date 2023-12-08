@@ -58,6 +58,7 @@ class Product(Base):
         return f"Product(ProductID={self.ProductID}, Name='{self.Name}', CategoryID={self.CategoryID}, Price={self.Price}, ProducerID={self.ProducerID})"
 
 
+@dataclass
 class Promotion(Base):
     __tablename__ = 'Promotions'
     PromotionID = Column(Integer, primary_key=True)
@@ -65,6 +66,16 @@ class Promotion(Base):
     DiscountPercentage = Column(Float)
     StartDate = Column(Date)
     EndDate = Column(Date)
+
+    def __init__(self, PromotionID, PromotionName, DiscountPercentage, StartDate, EndDate):
+        self.PromotionID = PromotionID
+        self.PromotionName = PromotionName
+        self.DiscountPercentage = DiscountPercentage
+        self.StartDate = StartDate
+        self.EndDate = EndDate
+
+    def __repr__(self):
+        return f"Promotion(PromotionID={self.PromotionID}, PromotionName='{self.PromotionName}', DiscountPercentage={self.DiscountPercentage}, StartDate={self.StartDate}, EndDate={self.EndDate})"
 
 # Producer.products = relationship("Product", order_by=Product.ProductID, back_populates="producer")
 # Producer = relationship("Producer", back_populates="products")
