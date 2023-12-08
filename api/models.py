@@ -6,6 +6,7 @@ from sqlalchemy.orm import declarative_base, relationship
 Base = declarative_base()
 
 
+@dataclass
 class Customer(Base):
     __tablename__ = 'Customers'
     CustomerID = Column(Integer, primary_key=True)
@@ -13,12 +14,30 @@ class Customer(Base):
     Email = Column(String(255))
     Phone = Column(String(20))
 
+    def __init__(self, CustomerID, Name, Email, Phone):
+        self.CustomerID = CustomerID
+        self.Name = Name
+        self.Email = Email
+        self.Phone = Phone
 
+    def __repr__(self):
+        return f"Customer(CustomerID={self.CustomerID}, Name='{self.Name}', Email={self.Email}, Phone={self.Phone})"
+
+
+@dataclass
 class Producer(Base):
     __tablename__ = 'Producers'
     ProducerID = Column(Integer, primary_key=True)
     ProducerName = Column(String(255))
     ProducerLocation = Column(String(255))
+
+    def __init__(self, ProducerID, ProducerName, ProducerLocation):
+        self.ProducerID = ProducerID
+        self.ProducerName = ProducerName
+        self.ProducerLocation = ProducerLocation
+
+    def __repr__(self):
+        return f"Producer(ProducerID={self.ProducerID}, ProducerName='{self.ProducerName}', ProducerLocation={self.ProducerLocation})"
 
 
 @dataclass
@@ -49,6 +68,13 @@ class Category(Base):
     __tablename__ = 'Categories'
     CategoryID = Column(Integer, primary_key=True)
     CategoryName = Column(String(255))
+
+    def __init__(self, CategoryID, CategoryName):
+        self.CategoryID = CategoryID
+        self.CategoryName = CategoryName
+
+    def __repr__(self):
+        return f"Category(CategoryID={self.CategoryID}, CategoryName='{self.CategoryName}')"
 
 
 @dataclass
