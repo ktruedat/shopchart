@@ -21,6 +21,7 @@ class Producer(Base):
     ProducerLocation = Column(String(255))
 
 
+@dataclass
 class Sale(Base):
     __tablename__ = 'Sales'
     SaleID = Column(Integer, primary_key=True)
@@ -30,6 +31,18 @@ class Sale(Base):
     Amount = Column(Float)
     PromotionID = Column(Integer, ForeignKey('Promotions.PromotionID'))
     Date = Column(Date)
+
+    def __init__(self, SaleID, ProductID, CustomerID, Quantity, Amount, PromotionID, Date):
+        self.SaleID = SaleID
+        self.ProductID = ProductID
+        self.CustomerID = CustomerID
+        self.Quantity = Quantity
+        self.Amount = Amount
+        self.PromotionID = PromotionID
+        self.Date = Date
+
+    def __repr__(self):
+        return f"Sale(SaleID={self.SaleID}, ProductID='{self.ProductID}', CustomerID={self.CustomerID}, Quantity={self.Quantity}, Amount={self.Amount}, PromotionID={self.PromotionID}, Date={self.Date})"
 
 
 class Category(Base):

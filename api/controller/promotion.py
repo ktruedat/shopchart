@@ -45,7 +45,7 @@ class PromotionController:
     def get_promotions(self):
         return self.promotion_repository.get_promotions()
 
-    def update_promotion(self, promotion_id, promotion):
+    def update_promotion(self, promotion_id: int, promotion):
         new_promotion = Promotion(
             PromotionID=None,
             PromotionName=promotion['PromotionName'],

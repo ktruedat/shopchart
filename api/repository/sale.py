@@ -1,90 +1,78 @@
-from sqlalchemy import create_engine, Column, Integer, Float, Date, ForeignKey
-from sqlalchemy.orm import declarative_base, Session, relationship
-from datetime import date
+from sqlalchemy.orm import sessionmaker
+from api.controller.sale import ISaleRepository
+from api.models import *
+from dbconnection import create_connection
 
-Base = declarative_base()
+engine = create_connection()
 
-class Customer(Base):
-    __tablename__ = 'Customers'
-    CustomerID = Column(Integer, primary_key=True)
-    Name = Column(String(255))
-    Email = Column(String(255))
-    Phone = Column(String(20))
-    sales = relationship("Sale", back_populates="customer")
 
-class Product(Base):
-    __tablename__ = 'Products'
-    ProductID = Column(Integer, primary_key=True)
-    Name = Column(String(255))
-    sales = relationship("Sale", back_populates="product")
+class SaleRepository(ISaleRepository):
 
-class Promotion(Base):
-    __tablename__ = 'Promotions'
-    PromotionID = Column(Integer, primary_key=True)
-    PromotionName = Column(String(255))
-    DiscountPercentage = Column(Float)
-    StartDate = Column(Date)
-    EndDate = Column(Date)
-    sales = relationship("Sale", back_populates="promotion")
+    def add_sale(self, sale: Sale):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-class Sale(Base):
-    __tablename__ = 'Sales'
-    SaleID = Column(Integer, primary_key=True)
-    ProductID = Column(Integer, ForeignKey('Products.ProductID'))
-    CustomerID = Column(Integer, ForeignKey('Customers.CustomerID'))
-    Quantity = Column(Integer)
-    Amount = Column(Float)
-    PromotionID = Column(Integer, ForeignKey('Promotions.PromotionID'))
-    Date = Column(Date)
+        session.add(sale)
+        session.commit()
+        session.close()
 
-    # Relationships
-    product = relationship("Product", back_populates="sales")
-    customer = relationship("Customer", back_populates="sales")
-    promotion = relationship("Promotion", back_populates="sales")
+        print(f"Product '{sale.SaleID}' created successfully!")
 
-# Replace 'your_username', 'your_password', 'your_host', and 'your_database' with your actual credentials
-db_uri = "mysql+pymysql://your_username:your_password@your_host/your_database"
-engine = create_engine(db_uri)
+        return sale
 
-# Bind the engine to the base class
-Base.metadata.bind = engine
+    def get_sale(self, sale_id: int):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-# Create tables if they don't exist
-Base.metadata.create_all()
+        sale = session.query(Sale).get(sale_id)
 
-# Create a session to interact with the database
-Session = sessionmaker(bind=engine)
-session = Session()
+        session.close()
 
-# CRUD Operations
+        return sale
 
-# Create a new sale
-new_sale = Sale(
-    ProductID=1,
-    CustomerID=1,
-    Quantity=5,
-    Amount=100.0,
-    PromotionID=1,
-    Date=date.today()
-)
+    def get_sales(self):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-session.add(new_sale)
-session.commit()
+        res_sales = session.query(Sale).all()
 
-# Read all sales
-all_sales = session.query(Sale).all()
-for sale in all_sales:
-    print(f"SaleID: {sale.SaleID}, Product: {sale.product.Name}, Customer: {sale.customer.Name}, Quantity: {sale.Quantity}, Amount: {sale.Amount}, Date: {sale.Date}")
+        session.close()
 
-# Update a sale
-sale_to_update = session.query(Sale).filter_by(SaleID=1).first()
-sale_to_update.Amount = 120.0
-session.commit()
+        return res_sales
 
-# Delete a sale
-sale_to_delete = session.query(Sale).filter_by(SaleID=1).first()
-session.delete(sale_to_delete)
-session.commit()
+    def update_sale(self, sale_id: int, sale: Sale):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
 
-# Don't forget to close the session when you're done
-session.close()
+        updated_sale = session.query(Sale).get(sale_id)
+        if updated_sale:
+            updated_sale.SaleID = None
+            updated_sale.ProductID = sale.ProductID
+            updated_sale.CustomerID = sale.CustomerID
+            updated_sale.Quantity = sale.Quantity
+            updated_sale.Amount = sale.Amount
+            updated_sale.PromotionID = sale.PromotionID
+            updated_sale.Date = sale.Date
+            session.commit()
+
+        session.close()
+        return updated_sale
+
+    def delete_sale(self, sale_id: int):
+        Base.metadata.bind = engine
+        Session = sessionmaker(bind=engine)
+        session = Session()
+
+        sale = session.query(Sale).get(sale_id)
+        if sale:
+            session.delete(sale)
+            session.commit()
+
+        session.close()
+        return sale
+
+
