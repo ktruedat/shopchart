@@ -31,5 +31,29 @@ class PromotionController:
 
     def add_promotion(self, promotion):
         new_promotion = Promotion(
-
+            PromotionID=None,
+            PromotionName=promotion['PromotionName'],
+            DiscountPercentage=promotion['DiscountPercentage'],
+            StartDate=promotion['StartDate'],
+            EndDate=promotion['EndDate'],
         )
+        return self.promotion_repository.add_promotion(new_promotion)
+
+    def get_promotion(self, promotion_id: int):
+        return self.promotion_repository.get_promotion(promotion_id)
+
+    def get_promotions(self):
+        return self.promotion_repository.get_promotions()
+
+    def update_promotion(self, promotion_id, promotion):
+        new_promotion = Promotion(
+            PromotionID=None,
+            PromotionName=promotion['PromotionName'],
+            DiscountPercentage=promotion['DiscountPercentage'],
+            StartDate=promotion['StartDate'],
+            EndDate=promotion['EndDate'],
+        )
+        return self.promotion_repository.update_promotion(promotion_id, new_promotion)
+
+    def delete_promotion(self, promotion_id: int):
+        return self.promotion_repository.delete_promotion(promotion_id)
