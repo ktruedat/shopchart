@@ -1,5 +1,4 @@
 from dataclasses import dataclass
-
 from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey
 from sqlalchemy.orm import declarative_base, relationship
 
