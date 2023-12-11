@@ -1,6 +1,6 @@
 import streamlit as st
 
-from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, promotion_crud_menu, sale_crud_menu
+from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, promotion_crud_menu, sale_crud_menu, analytics_menu
 
 # Page Config
 st.set_page_config(
@@ -18,6 +18,7 @@ customer_crud_menu()
 producer_crud_menu()
 promotion_crud_menu()
 sale_crud_menu()
+analytics_menu()
 ###################
 
 

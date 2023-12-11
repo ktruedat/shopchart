@@ -20,6 +20,7 @@ BEGIN
                          TotalQuantitySold = VALUES(TotalQuantitySold),
                          AverageSaleAmount = VALUES(AverageSaleAmount),
                          TotalCustomers = VALUES(TotalCustomers);
+
     IF NOT EXISTS (
         SELECT 1
         FROM Sales
