@@ -41,7 +41,8 @@ trends_repository = TrendsRepository()
 
 def product_crud_menu():
     crud_menu = st.sidebar.selectbox('Products',
-                                     ['Product Overview', 'Add Product', 'Get All Products', 'Update Product', 'Delete Product'])
+                                     ['Product Overview', 'Add Product', 'Get All Products', 'Update Product',
+                                      'Delete Product'])
 
     if crud_menu == 'Product Overview':
         print()
@@ -114,7 +115,8 @@ def product_crud_menu():
 def customer_crud_menu():
     # CRUD Menu
     crud_menu_customer = st.sidebar.selectbox('Customers',
-                                              ['Customer Overview', 'Add Customer', 'Get All Customers', 'Update Customer',
+                                              ['Customer Overview', 'Add Customer', 'Get All Customers',
+                                               'Update Customer',
                                                'Delete Customer'])
 
     if crud_menu_customer == 'Customer Overview':
@@ -179,7 +181,8 @@ def customer_crud_menu():
 def producer_crud_menu():
     # CRUD Menu
     crud_menu_producer = st.sidebar.selectbox('Producers',
-                                              ['Producer Overview', 'Add Producer', 'Get All Producers', 'Update Producer',
+                                              ['Producer Overview', 'Add Producer', 'Get All Producers',
+                                               'Update Producer',
                                                'Delete Producer'])
 
     if crud_menu_producer == 'Producer Overview':
@@ -239,7 +242,8 @@ def producer_crud_menu():
 
 def promotion_crud_menu():
     crud_menu_promotion = st.sidebar.selectbox('Promotions',
-                                               ['Promotion Overview', 'Add Promotion', 'Get All Promotions', 'Update Promotion',
+                                               ['Promotion Overview', 'Add Promotion', 'Get All Promotions',
+                                                'Update Promotion',
                                                 'Delete Promotion'])
 
     if crud_menu_promotion == 'Promotion Overview':
@@ -387,7 +391,7 @@ def analytics_menu():
                                  # 'Average Sale Amount',
                                  'Total Customers',
                                  'New Customers',
-                                 'RepeatCustomers', 'ProductPopularity', 'CategoryPopularity',
+                                 'Repeat Customers', 'Product Popularity', 'Category Popularity',
                                  'Sales Growth Percentage',
                                  'Average Purchase Frequency',
                                  'Customer Retention Rate', 'Seasonal Trends', 'Promotion Effectiveness'])
@@ -412,9 +416,13 @@ def analytics_menu():
     elif menu == 'Total Quantity Sold':
         st.subheader('Total Quantity Sold Section')
         total_quantity_sold_data = trends_repository.get_total_quantity_sold(start_date, end_date)
-        print(total_quantity_sold_data)
+        # print(f"HERE{total_quantity_sold_data}")
+
         if total_quantity_sold_data:
             total_quantity_sold_df = pd.DataFrame(total_quantity_sold_data, columns=['Date', 'TotalQuantitySold'])
+
+            total_quantity_sold_df['TotalQuantitySold'] = total_quantity_sold_df['TotalQuantitySold'].astype(float)
+
             total_quantity_sold_df.set_index('Date', inplace=True)
             st.line_chart(total_quantity_sold_df['TotalQuantitySold'])
         else:
@@ -449,6 +457,7 @@ def analytics_menu():
     elif menu == 'Repeat Customers':
         st.subheader('Repeat Customers Section')
         repeat_customers_data = trends_repository.get_total_repeat_customers(start_date, end_date)
+        print(f"repeat_customers_data{repeat_customers_data}")
 
         if repeat_customers_data:
             repeat_customers_df = pd.DataFrame(repeat_customers_data, columns=['Date', 'TotalRepeatCustomers'])
@@ -460,54 +469,64 @@ def analytics_menu():
     elif menu == 'Product Popularity':
         st.subheader('Product Popularity Section')
         product_popularity_data = trends_repository.get_product_popularity(start_date, end_date)
+        print(f"product_popularity_data{product_popularity_data}")
 
         if product_popularity_data:
-            product_popularity_df = pd.DataFrame(product_popularity_data, columns=['Date', 'ProductName', 'TotalQuantitySold'])
+            product_popularity_df = pd.DataFrame(product_popularity_data,
+                                                 columns=['Date', 'ProductName', 'TotalQuantitySold'])
+            product_popularity_df['TotalQuantitySold'] = pd.to_numeric(product_popularity_df['TotalQuantitySold'])
             product_popularity_df.set_index('Date', inplace=True)
-            st.line_chart(product_popularity_df['TotalQuantitySold'])
+            st.bar_chart(product_popularity_df, x='ProductName', y='TotalQuantitySold', use_container_width=True)
         else:
             st.info("No product popularity data found.")
 
     elif menu == 'Category Popularity':
         st.subheader('Category Popularity Section')
         category_popularity_data = trends_repository.get_category_popularity(start_date, end_date)
+        print(f"category_popularity_data{category_popularity_data}")
 
         if category_popularity_data:
-            category_popularity_df = pd.DataFrame(category_popularity_data, columns=['Date', 'CategoryName', 'TotalQuantitySold'])
+            category_popularity_df = pd.DataFrame(category_popularity_data,
+                                                  columns=['Date', 'CategoryName', 'TotalQuantitySold'])
+            category_popularity_df['TotalQuantitySold'] = pd.to_numeric(category_popularity_df['TotalQuantitySold'])
             category_popularity_df.set_index('Date', inplace=True)
-            st.line_chart(category_popularity_df['TotalQuantitySold'])
+
+            st.bar_chart(category_popularity_df, x='CategoryName', y='TotalQuantitySold', use_container_width=True)
         else:
             st.info("No category popularity data found.")
 
     elif menu == 'Sales Growth Percentage':
         st.subheader('Sales Growth Section')
         sales_growth_percentage_data = trends_repository.get_sales_growth_percentage(start_date, end_date)
+        print(f"sales_growth_percentage_data{sales_growth_percentage_data}")
 
         if sales_growth_percentage_data:
-            sales_growth_percentage_df = pd.DataFrame(sales_growth_percentage_data, columns=['Date', 'SalesGrowthPercentage'])
+            sales_growth_percentage_df = pd.DataFrame(sales_growth_percentage_data,
+                                                      columns=['Date', 'SalesGrowthPercentage'])
             sales_growth_percentage_df.set_index('Date', inplace=True)
             st.line_chart(sales_growth_percentage_df['SalesGrowthPercentage'])
         else:
             st.info("No sales growth percentage data found.")
 
-
     elif menu == 'Average Purchase Frequency':
         st.subheader('Average Purchase Frequency Section')
         average_purchase_frequency_data = trends_repository.get_average_purchase_frequency(start_date, end_date)
+        print(f"average_purchase_frequency_data{average_purchase_frequency_data}")
 
         if average_purchase_frequency_data:
-            average_purchase_frequency_df = pd.DataFrame(average_purchase_frequency_data, columns=['Date', 'AveragePurchaseFrequency'])
-            average_purchase_frequency_df.set_index('Date', inplace=True)
-            st.line_chart(average_purchase_frequency_df['AveragePurchaseFrequency'])
+            # Assuming average_purchase_frequency_data is a dictionary with keys 'Date' and 'AveragePurchaseFrequency'
+            st.write(f"Average Purchase Frequency on {average_purchase_frequency_data['Date']} is {average_purchase_frequency_data['AveragePurchaseFrequency']}")
         else:
             st.info("No average purchase frequency data found.")
 
     elif menu == 'Customer Retention Rate':
         st.subheader('Customer Retention Rate Section')
         customer_retention_rate_data = trends_repository.get_customer_retention_rate(start_date, end_date)
+        print(f"customer_retention_rate_data{customer_retention_rate_data}")
 
         if customer_retention_rate_data:
-            customer_retention_rate_df = pd.DataFrame(customer_retention_rate_data, columns=['Date', 'CustomerRetentionRate'])
+            customer_retention_rate_df = pd.DataFrame(customer_retention_rate_data,
+                                                      columns=['Date', 'CustomerRetentionRate'])
             customer_retention_rate_df.set_index('Date', inplace=True)
             st.line_chart(customer_retention_rate_df['CustomerRetentionRate'])
         else:
@@ -516,6 +535,7 @@ def analytics_menu():
     elif menu == 'Seasonal Trends':
         st.subheader('Seasonal Trends Section')
         seasonal_trends_data = trends_repository.get_seasonal_trends(start_date, end_date)
+        print(f"seasonal_trends_data{seasonal_trends_data}")
 
         if seasonal_trends_data:
             seasonal_trends_df = pd.DataFrame(seasonal_trends_data, columns=['Month', 'TotalSales'])
@@ -529,12 +549,14 @@ def analytics_menu():
         st.subheader('Promotion Effectiveness Section')
         promotion_id = st.number_input('Enter Promotion ID:')
         promotion_effectiveness_data = trends_repository.get_promotion_effectiveness(promotion_id)
+        print(f"promotion_effectiveness_data{promotion_effectiveness_data}")
 
         if promotion_effectiveness_data is not None:
-            promotion_effectiveness_df = pd.DataFrame({'Date': [start_date], 'PromotionEffectiveness': [promotion_effectiveness_data]})
-            promotion_effectiveness_df.set_index('Date', inplace=True)
-            st.line_chart(promotion_effectiveness_df['PromotionEffectiveness'])
+            promotion_effectiveness_df = pd.DataFrame(
+                {'Promotion': [f'Promotion {promotion_id}'], 'Effectiveness': [promotion_effectiveness_data]})
+            promotion_effectiveness_df.set_index('Promotion', inplace=True)
+            st.bar_chart(promotion_effectiveness_df['Effectiveness'])
         else:
             st.info("No promotion effectiveness data found.")
 
-    ##################################################################################
+##################################################################################

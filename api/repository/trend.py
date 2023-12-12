@@ -9,44 +9,6 @@ engine = create_connection()
 
 
 class TrendsRepository(ITrendsRepository):
-    # def __init__(self, entity_controller: EntityController):
-    #     self.entity_controller = entity_controller
-
-    def get_trends(self):
-        # Base.metadata.bind = engine
-        # Session = sessionmaker(bind=engine)
-        # session = Session()
-        #
-        # Sale = self.entity_controller.sale_controller.get_sales()
-        #
-        # query = (
-        #     session.query(
-        #         Sale.Date,
-        #         func.sum(Sale.Amount).label('TotalSales'),
-        #         func.sum(Sale.Quantity).label('TotalQuantitySold'),
-        #         func.avg(Sale.Amount).label('AverageSaleAmount'),
-        #         func.count(func.distinct(Sale.CustomerID)).label('TotalCustomers')
-        #     )
-        #     .group_by(Sale.Date)
-        # )
-        #
-        # results = query.all()
-        #
-        # trends_data = [
-        #     {
-        #         'Date': result.Date,
-        #         'TotalSales': result.TotalSales,
-        #         'TotalQuantitySold': result.TotalQuantitySold,
-        #         'AverageSaleAmount': result.AverageSaleAmount,
-        #         'TotalCustomers': result.TotalCustomers
-        #     }
-        #     for result in results
-        # ]
-        #
-        # session.close()
-        #
-        # return trends_data
-        pass
 
     def get_total_sales(self, start_date, end_date):
         Base.metadata.bind = engine
@@ -180,8 +142,12 @@ class TrendsRepository(ITrendsRepository):
 
         session.close()
 
-        sales_growth_percentage = ((total_sales_end - total_sales_start) / total_sales_start) * 100
-        return sales_growth_percentage if total_sales_start != 0 else 0
+        if total_sales_start is not None and total_sales_end is not None and total_sales_start != 0:
+            sales_growth_percentage = ((total_sales_end - total_sales_start) / total_sales_start) * 100
+        else:
+            sales_growth_percentage = 0
+
+        return sales_growth_percentage
 
     def get_average_purchase_frequency(self, start_date, end_date):
         Base.metadata.bind = engine
@@ -198,10 +164,15 @@ class TrendsRepository(ITrendsRepository):
             .filter(Sale.Date.between(start_date, end_date))
             .scalar()
         )
+
+        # Assuming you have a date for which you are calculating average purchase frequency
+        date = start_date  # You may need to replace this with the actual date
+
         session.close()
 
-        average_purchase_frequency = total_purchases / total_customers if total_customers > 0 else 0
-        return average_purchase_frequency
+        average_purchase_frequency_data = {'Date': date, 'AveragePurchaseFrequency': total_purchases / total_customers if total_customers > 0 else 0}
+        return average_purchase_frequency_data
+
 
     def get_customer_retention_rate(self, start_date, end_date):
         Base.metadata.bind = engine

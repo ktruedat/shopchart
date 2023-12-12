@@ -4,7 +4,7 @@ from abc import ABC, abstractmethod
 class ITrendsRepository(ABC):
 
     @abstractmethod
-    def get_trends(self):
+    def get_total_sales(self, start_date, end_date):
         pass
 
 
