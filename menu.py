@@ -400,7 +400,8 @@ def analytics_menu():
     end_date = st.date_input('Select End Date', datetime.today())
 
     if menu == 'Overview':
-        st.subheader('Overview Section')
+        # st.subheader('Overview Section')
+        print()
 
     elif menu == 'Total Sales':
         st.subheader('Total Sales Section')

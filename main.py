@@ -5,12 +5,13 @@ from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, prom
 # Page Config
 st.set_page_config(
     page_title="shopChart",
-    page_icon="📑️",
+    page_icon="static/icon.png",
     layout="wide"
 )
 
 st.title('Shop Marketing Insights')
 st.subheader('Understand the effectiveness of your shop marketing')
+
 
 ###################
 product_crud_menu()
@@ -23,4 +24,4 @@ analytics_menu()
 
 
 # Footer
-st.markdown('ktruedat shopChart')
+st.markdown('ktruedat shopChart 📑️')
