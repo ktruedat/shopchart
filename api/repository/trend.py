@@ -173,7 +173,6 @@ class TrendsRepository(ITrendsRepository):
         average_purchase_frequency_data = {'Date': date, 'AveragePurchaseFrequency': total_purchases / total_customers if total_customers > 0 else 0}
         return average_purchase_frequency_data
 
-
     def get_customer_retention_rate(self, start_date, end_date):
         Base.metadata.bind = engine
         Session = sessionmaker(bind=engine)

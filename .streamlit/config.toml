@@ -1,0 +1,24 @@
+#Default White
+#[theme]
+#primaryColor="#F63366"
+#backgroundColor="#FFFFFF"
+#secondaryBackgroundColor="#F0F2F6"
+#textColor="#262730"
+#font="sans serif"
+
+#Dark with purple accents
+#[theme]
+#primaryColor="#A932FF"  # Purple color
+#backgroundColor="#2E2E2E"  # Dark background color
+#secondaryBackgroundColor="#3B3B3B"  # Slightly lighter background color
+#textColor="#FFFFFF"  # White text color
+#font="sans serif"
+
+#Darker with purple accents
+[theme]
+primaryColor="#A932FF"  # Purple color
+backgroundColor="#0E1117"  # Dark background color
+secondaryBackgroundColor="#262730"  # Slightly lighter background color
+textColor="#FFFFFF"  # White text color
+font="sans serif"
+
