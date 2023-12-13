@@ -552,11 +552,9 @@ def analytics_menu():
         print(f"promotion_effectiveness_data{promotion_effectiveness_data}")
 
         if promotion_effectiveness_data is not None:
-            promotion_effectiveness_df = pd.DataFrame(
-                {'Promotion': [f'Promotion {promotion_id}'], 'Effectiveness': [promotion_effectiveness_data]})
-            promotion_effectiveness_df.set_index('Promotion', inplace=True)
-            st.bar_chart(promotion_effectiveness_df['Effectiveness'])
+            st.success(f"The effectiveness of Promotion {promotion_id} is ${promotion_effectiveness_data:.2f}")
         else:
             st.info("No promotion effectiveness data found.")
+
 
 ##################################################################################
