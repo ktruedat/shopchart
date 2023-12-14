@@ -339,6 +339,8 @@ def sale_crud_menu():
                 'Date': sale_date,
             }
             print(sale_data)
+            if sale_data['PromotionID'] == 0:
+                sale_data['PromotionID'] = None
             sale_id = sale_controller.add_sale(sale_data)
             st.success(f"Sale added successfully: {sale_id}")
 

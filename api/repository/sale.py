@@ -15,9 +15,10 @@ class SaleRepository(ISaleRepository):
 
         session.add(sale)
         session.commit()
+        session.refresh(sale)
         session.close()
 
-        print(f"Product '{sale.SaleID}' created successfully!")
+        print(f"Sale '{sale}' created successfully!")
 
         return sale
 
@@ -50,7 +51,6 @@ class SaleRepository(ISaleRepository):
 
         updated_sale = session.query(Sale).get(sale_id)
         if updated_sale:
-            updated_sale.SaleID = None
             updated_sale.ProductID = sale.ProductID
             updated_sale.CustomerID = sale.CustomerID
             updated_sale.Quantity = sale.Quantity
@@ -58,8 +58,10 @@ class SaleRepository(ISaleRepository):
             updated_sale.PromotionID = sale.PromotionID
             updated_sale.Date = sale.Date
             session.commit()
+            session.refresh(updated_sale)
 
         session.close()
+        print(f'HERE {updated_sale}')
         return updated_sale
 
     def delete_sale(self, sale_id: int):
@@ -70,6 +72,7 @@ class SaleRepository(ISaleRepository):
         sale = session.query(Sale).get(sale_id)
         if sale:
             session.delete(sale)
+            session.refresh(sale)
             session.commit()
 
         session.close()
