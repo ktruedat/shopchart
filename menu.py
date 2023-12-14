@@ -50,7 +50,7 @@ def product_crud_menu():
     elif crud_menu == 'Add Product':
         st.subheader('Add Product Section')
 
-
+        product_file = st.file_uploader("Choose a CSV file to seed data")
 
         product_name = st.text_input('Enter Product Name:')
         product_price = st.number_input('Enter Product Price:')
