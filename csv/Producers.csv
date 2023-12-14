@@ -1,0 +1,12 @@
+ProducerName,ProducerLocation
+Sony,Japan
+Nike,USA
+IKEA,Sweden
+Penguin Random House,USA
+LEGO,Denmark
+
+
+-- Producers
+1, "Local Farms", "Moldova"
+2, "Tech World", "Global"
+3, "Fashion Hub", "Europe"
