@@ -15,6 +15,7 @@ class PromotionRepository(IPromotionRepository):
 
         session.add(promotion)
         session.commit()
+        session.refresh(promotion)
         session.close()
 
         print(f"Product '{promotion.PromotionName}' created successfully!")
@@ -54,6 +55,7 @@ class PromotionRepository(IPromotionRepository):
             promotion.DiscountPercentage = new_promotion.DiscountPercentage
             promotion.StartDate = new_promotion.StartDate
             promotion.EndDate = new_promotion.EndDate
+            session.refresh(promotion)
             session.commit()
 
         session.close()
@@ -67,6 +69,7 @@ class PromotionRepository(IPromotionRepository):
         promotion = session.query(Promotion).get(promotion_id)
         if promotion:
             session.delete(promotion)
+            session.refresh(promotion)
             session.commit()
 
         session.close()
