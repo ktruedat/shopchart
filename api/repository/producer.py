@@ -19,6 +19,7 @@ class ProducerRepository(IProducerRepository):
         )
         session.add(new_producer)
         session.commit()
+        session.refresh(new_producer)
         session.close()
 
         print(f"Product '{producer['Name']}' created successfully!")
@@ -56,6 +57,7 @@ class ProducerRepository(IProducerRepository):
             producer.ProducerName = new_producer['Name']
             producer.ProducerLocation = new_producer['Location']
             session.commit()
+            session.refresh(producer)
 
         session.close()
         return producer
@@ -69,6 +71,7 @@ class ProducerRepository(IProducerRepository):
         if producer:
             session.delete(producer)
             session.commit()
+            session.refresh(producer)
 
         session.close()
         return producer
