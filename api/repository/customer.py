@@ -18,6 +18,7 @@ class CustomerRepository(ICustomerRepository):
         )
         session.add(new_customer)
         session.commit()
+        session.refresh(new_customer)
         session.close()
         print("Customer created successfully!")
 
@@ -61,6 +62,7 @@ class CustomerRepository(ICustomerRepository):
             customer.Email = new_customer.Email
             customer.Phone = new_customer.Phone
             session.commit()
+            session.refresh(customer)
             print("Customer updated successfully!")
         else:
             print("Customer not found.")
@@ -74,6 +76,7 @@ class CustomerRepository(ICustomerRepository):
         if customer:
             session.delete(customer)
             session.commit()
+            session.refresh(customer)
             print("Customer deleted successfully!")
         else:
             print("Customer not found.")
