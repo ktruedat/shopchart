@@ -116,33 +116,33 @@ class Promotion(Base):
         return f"Promotion(PromotionID={self.PromotionID}, PromotionName='{self.PromotionName}', DiscountPercentage={self.DiscountPercentage}, StartDate={self.StartDate}, EndDate={self.EndDate})"
 
 
-@dataclass
-class SalesTrend(Base):
-    __tablename__ = 'SalesTrend'
-    SalesTrendID: int = Column(Integer, primary_key=True, autoincrement=True)
-    Date: Date = Column(Date, unique=True, nullable=True)
-    TotalSales: Float = Column(Float, nullable=True)
-    TotalQuantitySold: int = Column(Integer, nullable=True)
-    AverageSaleAmount: Float = Column(Float, nullable=True)
-    TotalCustomers: int = Column(Integer, nullable=True)
-    NewCustomers: int = Column(Integer, nullable=True)
-    RepeatCustomers: int = Column(Integer, nullable=True)
-    ProductPopularity: String = Column(String(255), nullable=True)
-    CategoryPopularity: String = Column(String(255), nullable=True)
-    SalesGrowthPercentage: Float = Column(Float, nullable=True)
-    AveragePurchaseFrequency: Float = Column(Float, nullable=True)
-    CustomerRetentionRate: Float = Column(Float, nullable=True)
-    SeasonalTrends: String = Column(String(255), nullable=True)
-    PromotionEffectiveness: String = Column(String(255), nullable=True)
-
-    def __repr__(self):
-        return f"SalesTrend(SalesTrendID={self.SalesTrendID}, Date={self.Date}, TotalSales={self.TotalSales}, " \
-               f"TotalQuantitySold={self.TotalQuantitySold}, AverageSaleAmount={self.AverageSaleAmount}, " \
-               f"TotalCustomers={self.TotalCustomers}, NewCustomers={self.NewCustomers}, " \
-               f"RepeatCustomers={self.RepeatCustomers}, ProductPopularity={self.ProductPopularity}, " \
-               f"CategoryPopularity={self.CategoryPopularity}, SalesGrowthPercentage={self.SalesGrowthPercentage}, " \
-               f"AveragePurchaseFrequency={self.AveragePurchaseFrequency}, CustomerRetentionRate={self.CustomerRetentionRate}, " \
-               f"SeasonalTrends={self.SeasonalTrends}, PromotionEffectiveness={self.PromotionEffectiveness})"
+# @dataclass
+# class SalesTrend(Base):
+#     __tablename__ = 'SalesTrend'
+#     SalesTrendID: int = Column(Integer, primary_key=True, autoincrement=True)
+#     Date: Date = Column(Date, unique=True, nullable=True)
+#     TotalSales: Float = Column(Float, nullable=True)
+#     TotalQuantitySold: int = Column(Integer, nullable=True)
+#     AverageSaleAmount: Float = Column(Float, nullable=True)
+#     TotalCustomers: int = Column(Integer, nullable=True)
+#     NewCustomers: int = Column(Integer, nullable=True)
+#     RepeatCustomers: int = Column(Integer, nullable=True)
+#     ProductPopularity: String = Column(String(255), nullable=True)
+#     CategoryPopularity: String = Column(String(255), nullable=True)
+#     SalesGrowthPercentage: Float = Column(Float, nullable=True)
+#     AveragePurchaseFrequency: Float = Column(Float, nullable=True)
+#     CustomerRetentionRate: Float = Column(Float, nullable=True)
+#     SeasonalTrends: String = Column(String(255), nullable=True)
+#     PromotionEffectiveness: String = Column(String(255), nullable=True)
+#
+#     def __repr__(self):
+#         return f"SalesTrend(SalesTrendID={self.SalesTrendID}, Date={self.Date}, TotalSales={self.TotalSales}, " \
+#                f"TotalQuantitySold={self.TotalQuantitySold}, AverageSaleAmount={self.AverageSaleAmount}, " \
+#                f"TotalCustomers={self.TotalCustomers}, NewCustomers={self.NewCustomers}, " \
+#                f"RepeatCustomers={self.RepeatCustomers}, ProductPopularity={self.ProductPopularity}, " \
+#                f"CategoryPopularity={self.CategoryPopularity}, SalesGrowthPercentage={self.SalesGrowthPercentage}, " \
+#                f"AveragePurchaseFrequency={self.AveragePurchaseFrequency}, CustomerRetentionRate={self.CustomerRetentionRate}, " \
+#                f"SeasonalTrends={self.SeasonalTrends}, PromotionEffectiveness={self.PromotionEffectiveness})"
 
 
 # Producer.products = relationship("Product", order_by=Product.ProductID, back_populates="producer")

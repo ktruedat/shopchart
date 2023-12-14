@@ -4,9 +4,6 @@ Nike,USA
 IKEA,Sweden
 Penguin Random House,USA
 LEGO,Denmark
-
-
--- Producers
-1, "Local Farms", "Moldova"
-2, "Tech World", "Global"
-3, "Fashion Hub", "Europe"
+Local Farms,Moldova
+Tech World,Global
+Fashion Hub,Europe

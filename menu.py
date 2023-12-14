@@ -297,7 +297,7 @@ def promotion_crud_menu():
             result = promotion_controller.delete_promotion(promotion_id_to_delete)
             st.success(result)
 
-    elif crud_menu_promotion == 'Get All Promotion':
+    elif crud_menu_promotion == 'Get All Promotions':
         st.subheader('Get All Promotions Section')
 
         all_promotions = promotion_controller.get_promotions()
