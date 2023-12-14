@@ -42,6 +42,7 @@ class ProductRepository(IProductRepository):
             ProducerID=product['ProducerID']
         )
         session.add(new_product)
+        session.refresh(new_product)
         session.commit()
         print(f"Product '{product['Name']}' created successfully!")
         session.close()
@@ -63,6 +64,7 @@ class ProductRepository(IProductRepository):
             product.Price = new_product.Price
             product.ProducerID = new_product.ProducerID
             product.CategoryID = new_product.CategoryID
+            session.refresh(product)
             session.commit()
             print(f"Product with ID {product_id} updated successfully!")
         else:
@@ -78,6 +80,7 @@ class ProductRepository(IProductRepository):
         product = session.query(Product).filter_by(ProductID=product_id).first()
         if product:
             session.delete(product)
+            session.refresh(product)
             session.commit()
             print(f"Product with ID {product_id} deleted successfully!")
         else:
