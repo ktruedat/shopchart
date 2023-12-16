@@ -3,6 +3,7 @@ from sqlalchemy.orm import sessionmaker
 from api.models import *
 from api.controller.trend import ITrendsRepository
 from dbconnection import create_connection
+
 # from api.controller.entity import EntityController
 
 engine = create_connection()
@@ -53,8 +54,8 @@ class TrendsRepository(ITrendsRepository):
             .group_by(Sale.Date)
             .all()
         )
-
         session.close()
+        print(total_customers)
 
         return total_customers
 
@@ -71,6 +72,7 @@ class TrendsRepository(ITrendsRepository):
         )
 
         session.close()
+        print(total_new_customers)
 
         return total_new_customers
 
@@ -81,13 +83,13 @@ class TrendsRepository(ITrendsRepository):
 
         total_repeat_customers = (
             session.query(Sale.Date, func.count(distinct(Sale.CustomerID)).label("TotalRepeatCustomers"))
-            .filter(and_(Sale.Date.between(start_date, end_date), exists().where(Sale.Date < start_date)))
+            .filter(and_(Sale.Date.between(start_date, end_date), exists().where(Sale.Date < end_date)))
             .group_by(Sale.Date)
             .all()
         )
 
         session.close()
-
+        print(total_repeat_customers)
         return total_repeat_customers
 
     def get_product_popularity(self, start_date, end_date):
@@ -104,6 +106,8 @@ class TrendsRepository(ITrendsRepository):
         )
 
         session.close()
+
+        print(product_popularity)
 
         return product_popularity
 
@@ -122,31 +126,35 @@ class TrendsRepository(ITrendsRepository):
         )
 
         session.close()
-
+        print(category_popularity)
         return category_popularity
 
     def get_sales_growth_percentage(self, start_date, end_date):
         Base.metadata.bind = engine
         Session = sessionmaker(bind=engine)
         session = Session()
+
         total_sales_start = (
-            session.query(func.sum(Sale.Amount))
+            session.query(func.coalesce(func.sum(Sale.Amount), 0))
             .filter(Sale.Date == start_date)
             .scalar()
         )
         total_sales_end = (
-            session.query(func.sum(Sale.Amount))
+            session.query(func.coalesce(func.sum(Sale.Amount), 0))
             .filter(Sale.Date == end_date)
             .scalar()
         )
 
         session.close()
 
-        if total_sales_start is not None and total_sales_end is not None and total_sales_start != 0:
+        print(f"total_sales_start: {total_sales_start}, total_sales_end: {total_sales_end}")
+
+        if total_sales_start != 0:
             sales_growth_percentage = ((total_sales_end - total_sales_start) / total_sales_start) * 100
         else:
             sales_growth_percentage = 0
 
+        print(f"sales_growth_percentage: {sales_growth_percentage}")
         return sales_growth_percentage
 
     def get_average_purchase_frequency(self, start_date, end_date):
@@ -169,27 +177,49 @@ class TrendsRepository(ITrendsRepository):
         date = start_date  # You may need to replace this with the actual date
 
         session.close()
-
-        average_purchase_frequency_data = {'Date': date, 'AveragePurchaseFrequency': total_purchases / total_customers if total_customers > 0 else 0}
+        average_purchase_frequency_data = {'Date': date,
+                                           'AveragePurchaseFrequency': total_purchases / total_customers if total_customers > 0 else 0}
+        print(average_purchase_frequency_data)
         return average_purchase_frequency_data
 
     def get_customer_retention_rate(self, start_date, end_date):
         Base.metadata.bind = engine
         Session = sessionmaker(bind=engine)
         session = Session()
+
         retained_customers = (
             session.query(func.count(distinct(Sale.CustomerID)))
             .filter(Sale.Date.between(start_date, end_date))
             .scalar()
         )
+
         total_customers_previous_period = (
             session.query(func.count(distinct(Sale.CustomerID)))
             .filter(Sale.Date < start_date)
             .scalar()
         )
+
         session.close()
 
-        customer_retention_rate = (retained_customers / total_customers_previous_period) * 100 if total_customers_previous_period != 0 else 0
+        if total_customers_previous_period == 0:
+            # Check if there are customers in the dataset before start_date
+            earliest_customer_date = (
+                session.query(func.min(Sale.Date))
+                .scalar()
+            )
+            if earliest_customer_date is not None and earliest_customer_date < start_date:
+                total_customers_previous_period = (
+                    session.query(func.count(distinct(Sale.CustomerID)))
+                    .filter(Sale.Date < start_date)
+                    .scalar()
+                )
+
+        if total_customers_previous_period == 0:
+            customer_retention_rate = 0
+        else:
+            customer_retention_rate = (retained_customers / total_customers_previous_period) * 100
+
+        print(customer_retention_rate)
         return customer_retention_rate
 
     def get_seasonal_trends(self, start_date, end_date):
@@ -204,7 +234,7 @@ class TrendsRepository(ITrendsRepository):
             .all()
         )
         session.close()
-
+        print(seasonal_trends)
         return seasonal_trends
 
     def get_promotion_effectiveness(self, promotion_id):
@@ -220,5 +250,3 @@ class TrendsRepository(ITrendsRepository):
         session.close()
 
         return promotion_effectiveness if promotion_effectiveness is not None else 0
-
-
