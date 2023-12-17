@@ -1,6 +1,11 @@
 import streamlit as st
+from PIL import Image
+from streamlit_option_menu import option_menu
 
-from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, promotion_crud_menu, sale_crud_menu, analytics_menu
+from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, promotion_crud_menu, sale_crud_menu, \
+    analytics_menu
+
+# Main page
 
 # Page Config
 st.set_page_config(
@@ -9,19 +14,91 @@ st.set_page_config(
     layout="wide"
 )
 
-st.title('Shop Marketing Insights')
-st.subheader('Understand the effectiveness of your shop marketing')
+st.markdown("""
+    <style>
+        .reportview-container {
+            margin-top: -2em;
+        }
+        #MainMenu {visibility: hidden;}
+        .stDeployButton {display:none;}
+        footer {visibility: hidden;}
+        #stDecoration {display:none;}
+    </style>
+""", unsafe_allow_html=True)
+
+selected = option_menu(
+    menu_title=None,
+    options=["Home", "Edit Data", "Analytics"],
+    icons=["house", "database", "bar-chart-fill"],
+    menu_icon="cast",
+    default_index=0,
+    orientation="horizontal"
+)
 
 
-###################
-product_crud_menu()
-customer_crud_menu()
-producer_crud_menu()
-promotion_crud_menu()
-sale_crud_menu()
-analytics_menu()
-###################
+def main_page():
+    st.markdown("<h1 style='text-align: center;'>Shop Marketing Insights</h1>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center;'>Understand the effectiveness of your shop marketing</h1>",
+                unsafe_allow_html=True)
 
 
-# Footer
-st.markdown('ktruedat shopChart 📑️')
+def crud_page():
+    st.title("CRUD Functionality")
+    st.write(
+        "Welcome to the CRUD Functionality page. This page allows you to perform Create, Read, Update, and Delete ("
+        "CRUD) operations on various entities. Explore the following features:")
+
+    col1, col2, col3, col4, col5 = st.columns(5)
+
+    with col5:
+        st.subheader("Product CRUD:")
+        st.write("- Add, edit, and delete products in your inventory.")
+        st.write("- View detailed information about each product.")
+        st.image("static/product.png")
+    # Customer CRUD Card
+    with col1:
+        st.subheader("Customer CRUD:")
+        st.write("- Manage customer data, including adding new customers and updating their details.")
+        st.write("- Keep track of customer interactions and purchases.")
+        st.image("static/customer.png")
+
+    # Producer CRUD Card
+    with col2:
+        st.subheader("Producer CRUD:")
+        st.write("- Maintain a list of producers and their information.")
+        st.write("- Easily update and delete producer details.")
+        st.image("static/producer.png")
+
+    # Promotion CRUD Card
+    with col3:
+        st.subheader("Promotion CRUD:")
+        st.write("- Create and manage promotional offers.")
+        st.write("- Track the performance of promotions over time.")
+        st.image("static/promotion.png")
+
+    # Sale CRUD Card
+    with col4:
+        st.subheader("Sale CRUD:")
+        st.write("- Record and manage sales transactions.")
+        st.write("- Monitor sales performance and generate reports.")
+        st.image("static/sale.png")
+
+    product_crud_menu()
+    customer_crud_menu()
+    producer_crud_menu()
+    promotion_crud_menu()
+    sale_crud_menu()
+
+
+# Analytics page
+def analytics_page():
+    st.title("Analytics Menu")
+    analytics_menu()
+
+
+if selected == "Home":
+    main_page()
+elif selected == "Edit Data":
+    crud_page()
+elif selected == "Analytics":
+    analytics_page()

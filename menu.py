@@ -519,7 +519,6 @@ def analytics_menu():
         print(f"average_purchase_frequency_data{average_purchase_frequency_data}")
 
         if average_purchase_frequency_data:
-            # Assuming average_purchase_frequency_data is a dictionary with keys 'Date' and 'AveragePurchaseFrequency'
             st.write(f"Average Purchase Frequency on {average_purchase_frequency_data['Date']} is {average_purchase_frequency_data['AveragePurchaseFrequency']}")
         else:
             st.info("No average purchase frequency data found.")
