@@ -106,7 +106,8 @@ def product_crud_menu():
         all_products = product_controller.get_all_products()
         print(all_products)
         if all_products:
-            products_df = pd.DataFrame([vars(product) for product in all_products])
+            product_data = [{'Name': product.Name, 'ProductID': product.ProductID, 'ProducerID': product.ProducerID, 'CategoryID': product.CategoryID, 'Price': product.Price} for product in all_products]
+            products_df = pd.DataFrame(product_data)
             st.table(products_df)
         else:
             st.info("No products found.")
@@ -172,7 +173,8 @@ def customer_crud_menu():
         all_customers = customer_controller.get_customers()
         print(all_customers)
         if all_customers:
-            customer_df = pd.DataFrame([vars(customer) for customer in all_customers])
+            customer_data = [{'Name': customer.Name, 'CustomerID': customer.CustomerID, 'Email': customer.Email, 'Phone': customer.Phone} for customer in all_customers]
+            customer_df = pd.DataFrame(customer_data)
             st.table(customer_df)
         else:
             st.info("No customers found.")
@@ -234,7 +236,8 @@ def producer_crud_menu():
         all_producers = producer_controller.get_producers()
         print(all_producers)
         if all_producers:
-            producer_df = pd.DataFrame([vars(producer) for producer in all_producers])
+            producer_data = [{'Name': producer.ProducerName, 'Location': producer.ProducerLocation, 'ID': producer.ProducerID} for producer in all_producers]
+            producer_df = pd.DataFrame(producer_data)
             st.table(producer_df)
         else:
             st.info("No producers found.")
@@ -303,12 +306,13 @@ def promotion_crud_menu():
         all_promotions = promotion_controller.get_promotions()
         print(all_promotions)
         if all_promotions:
-            promotion_df = pd.DataFrame([vars(promotion) for promotion in all_promotions])
+            promotion_data = [{'Name': promotion.PromotionName, 'ID': promotion.PromotionID, 'Start Date': promotion.StartDate, 'End Date': promotion.EndDate, 'Discount Percentage': promotion.DiscountPercentage} for promotion in all_promotions]
+            promotion_df = pd.DataFrame(promotion_data)
             st.table(promotion_df)
         else:
             st.info("No promotions found.")
 
-    ###############################################################################
+####################################################################################
 
 
 def sale_crud_menu():
@@ -381,7 +385,8 @@ def sale_crud_menu():
         all_sales = sale_controller.get_sales()
         print(all_sales)
         if all_sales:
-            sales_df = pd.DataFrame([vars(sale) for sale in all_sales])
+            promotion_data = [{'ID': sale.SaleID, 'Quantity': sale.Quantity, 'ProductID': sale.ProductID, 'Amount': sale.Amount, 'CustomerID': sale.CustomerID, 'PromotionID': sale.PromotionID, 'Date': sale.Date} for sale in all_sales]
+            sales_df = pd.DataFrame(promotion_data)
             st.table(sales_df)
         else:
             st.info("No sales found.")
@@ -414,7 +419,7 @@ def analytics_menu():
         if total_sales_data:
             total_sales_df = pd.DataFrame(total_sales_data, columns=['Date', 'TotalSales'])
             total_sales_df.set_index('Date', inplace=True)
-            st.line_chart(total_sales_df['TotalSales'])
+            st.line_chart(total_sales_df['TotalSales'], color='#A932FF')
         else:
             st.info("No sales data found.")
 
@@ -429,7 +434,7 @@ def analytics_menu():
             total_quantity_sold_df['TotalQuantitySold'] = total_quantity_sold_df['TotalQuantitySold'].astype(float)
 
             total_quantity_sold_df.set_index('Date', inplace=True)
-            st.line_chart(total_quantity_sold_df['TotalQuantitySold'])
+            st.line_chart(total_quantity_sold_df['TotalQuantitySold'], color='#A932FF')
         else:
             st.info("No quantity sold data found.")
 
@@ -444,7 +449,7 @@ def analytics_menu():
         if total_customers_data:
             total_customers_df = pd.DataFrame(total_customers_data, columns=['Date', 'TotalCustomers'])
             total_customers_df.set_index('Date', inplace=True)
-            st.line_chart(total_customers_df['TotalCustomers'])
+            st.line_chart(total_customers_df['TotalCustomers'], color='#A932FF')
         else:
             st.info("No customer data found.")
 
@@ -455,7 +460,7 @@ def analytics_menu():
         if new_customers_data:
             new_customers_df = pd.DataFrame(new_customers_data, columns=['Date', 'TotalNewCustomers'])
             new_customers_df.set_index('Date', inplace=True)
-            st.line_chart(new_customers_df['TotalNewCustomers'])
+            st.line_chart(new_customers_df['TotalNewCustomers'], color='#A932FF')
         else:
             st.info("No new customer data found.")
 
@@ -467,7 +472,7 @@ def analytics_menu():
         if repeat_customers_data:
             repeat_customers_df = pd.DataFrame(repeat_customers_data, columns=['Date', 'TotalRepeatCustomers'])
             repeat_customers_df.set_index('Date', inplace=True)
-            st.line_chart(repeat_customers_df['TotalRepeatCustomers'])
+            st.line_chart(repeat_customers_df['TotalRepeatCustomers'], color='#A932FF')
         else:
             st.info("No repeat customer data found.")
 
@@ -481,7 +486,7 @@ def analytics_menu():
                                                  columns=['Date', 'ProductName', 'TotalQuantitySold'])
             product_popularity_df['TotalQuantitySold'] = pd.to_numeric(product_popularity_df['TotalQuantitySold'])
             product_popularity_df.set_index('Date', inplace=True)
-            st.bar_chart(product_popularity_df, x='ProductName', y='TotalQuantitySold', use_container_width=True)
+            st.bar_chart(product_popularity_df, x='ProductName', y='TotalQuantitySold', use_container_width=True, color='#A932FF')
         else:
             st.info("No product popularity data found.")
 
@@ -496,7 +501,7 @@ def analytics_menu():
             category_popularity_df['TotalQuantitySold'] = pd.to_numeric(category_popularity_df['TotalQuantitySold'])
             category_popularity_df.set_index('Date', inplace=True)
 
-            st.bar_chart(category_popularity_df, x='CategoryName', y='TotalQuantitySold', use_container_width=True)
+            st.bar_chart(category_popularity_df, x='CategoryName', y='TotalQuantitySold', use_container_width=True, color='#A932FF')
         else:
             st.info("No category popularity data found.")
 
@@ -509,7 +514,7 @@ def analytics_menu():
             sales_growth_percentage_df = pd.DataFrame(sales_growth_percentage_data,
                                                       columns=['Date', 'SalesGrowthPercentage'])
             sales_growth_percentage_df.set_index('Date', inplace=True)
-            st.line_chart(sales_growth_percentage_df['SalesGrowthPercentage'])
+            st.line_chart(sales_growth_percentage_df['SalesGrowthPercentage'], color='#A932FF')
         else:
             st.info("No sales growth percentage data found.")
 
@@ -532,7 +537,7 @@ def analytics_menu():
             customer_retention_rate_df = pd.DataFrame(customer_retention_rate_data,
                                                       columns=['Date', 'CustomerRetentionRate'])
             customer_retention_rate_df.set_index('Date', inplace=True)
-            st.line_chart(customer_retention_rate_df['CustomerRetentionRate'])
+            st.line_chart(customer_retention_rate_df['CustomerRetentionRate'], color='#A932FF')
         else:
             st.info("No customer retention rate data found.")
 
@@ -545,7 +550,7 @@ def analytics_menu():
             seasonal_trends_df = pd.DataFrame(seasonal_trends_data, columns=['Month', 'TotalSales'])
             seasonal_trends_df['Date'] = pd.to_datetime(seasonal_trends_df['Month'], format='%m').dt.strftime('%B')
             seasonal_trends_df.set_index('Date', inplace=True)
-            st.line_chart(seasonal_trends_df['TotalSales'])
+            st.line_chart(seasonal_trends_df['TotalSales'], color='#A932FF')
         else:
             st.info("No seasonal trends data found.")
 

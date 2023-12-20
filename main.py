@@ -1,5 +1,4 @@
 import streamlit as st
-from PIL import Image
 from streamlit_option_menu import option_menu
 
 from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, promotion_crud_menu, sale_crud_menu, \
@@ -10,7 +9,7 @@ from menu import product_crud_menu, customer_crud_menu, producer_crud_menu, prom
 # Page Config
 st.set_page_config(
     page_title="shopChart",
-    page_icon="static/icon.png",
+    page_icon="static/statistics.png",
     layout="wide"
 )
 
@@ -37,13 +36,13 @@ selected = option_menu(
 
 
 def main_page():
-    st.markdown("<h1 style='text-align: center;'>Shop Marketing Insights</h1>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center;'>Understand the effectiveness of your shop marketing</h1>",
-                unsafe_allow_html=True)
-
-    style = "<style>h2 {text-align: center;}</style>"
-    st.markdown(style, unsafe_allow_html=True)
-    st.columns(3)[1].image("static/statistics.png")
+    with st.container(border=True):
+        st.markdown("<h1 style='text-align: center;'>shopChart</h1>", unsafe_allow_html=True)
+        st.markdown("<h2 style='text-align: center;'>Understand the effectiveness of your shop marketing</h2>",
+                    unsafe_allow_html=True)
+        style = "<style>h2 {text-align: center;}</style>"
+        st.markdown(style, unsafe_allow_html=True)
+        st.columns(3)[1].image("static/statistics.png")
 
 
 def crud_page():
