@@ -41,6 +41,10 @@ def main_page():
     st.markdown("<h2 style='text-align: center;'>Understand the effectiveness of your shop marketing</h1>",
                 unsafe_allow_html=True)
 
+    style = "<style>h2 {text-align: center;}</style>"
+    st.markdown(style, unsafe_allow_html=True)
+    st.columns(3)[1].image("static/statistics.png")
+
 
 def crud_page():
     st.title("CRUD Functionality")
@@ -93,6 +97,23 @@ def crud_page():
 # Analytics page
 def analytics_page():
     st.title("Analytics Menu")
+    st.write("Explore insightful analytics on this page. Gain valuable insights and visualize data to make informed "
+             "decisions. Key features include:")
+
+    col1, col2 = st.columns(2)
+
+    # Data Visualization Card
+    with col1:
+        st.subheader("Data Visualization:")
+        st.write("- Utilize interactive charts and graphs to visualize trends.")
+        st.write("- Compare data points to identify patterns and outliers.")
+
+    # Statistical Analysis Card
+    with col2:
+        st.subheader("Statistical Analysis:")
+        st.write("- Perform statistical analyses on your data.")
+        st.write("- Uncover correlations and dependencies within your dataset.")
+
     analytics_menu()
 
 
