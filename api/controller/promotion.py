@@ -32,7 +32,7 @@ class PromotionController:
     def add_promotion(self, promotion):
         new_promotion = Promotion(
             PromotionID=None,
-            PromotionName=promotion['PromotionName'],
+            PromotionName=promotion['Name'],
             DiscountPercentage=promotion['DiscountPercentage'],
             StartDate=promotion['StartDate'],
             EndDate=promotion['EndDate'],

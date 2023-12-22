@@ -12,13 +12,13 @@ class CustomerRepository(ICustomerRepository):
         Session = sessionmaker(bind=engine)
         session = Session()
         new_customer = Customer(
+            CustomerID=None,
             Name=customer['Name'],
             Email=customer['Email'],
             Phone=customer['Phone'],
         )
         session.add(new_customer)
         session.commit()
-        session.refresh(new_customer)
         session.close()
         print("Customer created successfully!")
 

@@ -30,19 +30,18 @@ class ProductRepository(IProductRepository):
 
         return res_products
 
-
     def add_product(self, product):
         Base.metadata.bind = engine
         Session = sessionmaker(bind=engine)
         session = Session()
         new_product = Product(
+            ProductID=None,
             Name=product['Name'],
             CategoryID=product['CategoryID'],
             Price=product['Price'],
             ProducerID=product['ProducerID']
         )
         session.add(new_product)
-        session.refresh(new_product)
         session.commit()
         print(f"Product '{product['Name']}' created successfully!")
         session.close()

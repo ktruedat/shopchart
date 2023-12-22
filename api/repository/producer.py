@@ -14,12 +14,12 @@ class ProducerRepository(IProducerRepository):
         session = Session()
 
         new_producer = Producer(
+            ProducerID=None,
             ProducerName=producer['Name'],
             ProducerLocation=producer['Location']
         )
         session.add(new_producer)
         session.commit()
-        session.refresh(new_producer)
         session.close()
 
         print(f"Product '{producer['Name']}' created successfully!")

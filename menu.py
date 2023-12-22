@@ -56,12 +56,13 @@ def product_crud_menu():
         product_price = st.number_input('Enter Product Price:')
 
         categories = {1: 'Category 1', 2: 'Category 2', 3: 'Category 3'}
-        selected_category_id = st.selectbox('Select Category:', list(categories.values()))
+        selected_category_id = st.selectbox('Select Category:', list(categories.keys()))
         producers = {1: 'Producer 1', 2: 'Producer 2', 3: 'Producer 3'}
-        selected_producer_id = st.selectbox('Select Producer:', list(producers.values()))
+        selected_producer_id = st.selectbox('Select Producer:', list(producers.keys()))
 
         if st.button('Add Product'):
             product_data = {
+                'ProductID': 0,
                 'Name': product_name,
                 'CategoryID': selected_category_id,
                 'Price': product_price,
@@ -69,7 +70,7 @@ def product_crud_menu():
             }
             print(product_data)
             product_id = product_controller.add_product(product_data)
-            st.success(f"Product added successfully with ID: {product_id}")
+            st.success(f"Product added successfully with name: {product_name}")
 
     elif crud_menu == 'Update Product':
         st.subheader('Update Product Section')
@@ -79,9 +80,9 @@ def product_crud_menu():
         updated_product_price = st.number_input('Enter Updated Product Price:')
 
         categories = {1: 'Category 1', 2: 'Category 2', 3: 'Category 3'}
-        selected_category_id = st.selectbox('Select Category:', list(categories.values()))
+        selected_category_id = st.selectbox('Select Category:', list(categories.keys()))
         producers = {1: 'Producer 1', 2: 'Producer 2', 3: 'Producer 3'}
-        selected_producer_id = st.selectbox('Select Producer:', list(producers.values()))
+        selected_producer_id = st.selectbox('Select Producer:', list(producers.keys()))
         if st.button('Update Product'):
             product_data = {
                 'Name': updated_product_name,
@@ -106,7 +107,8 @@ def product_crud_menu():
         all_products = product_controller.get_all_products()
         print(all_products)
         if all_products:
-            product_data = [{'Name': product.Name, 'ProductID': product.ProductID, 'ProducerID': product.ProducerID, 'CategoryID': product.CategoryID, 'Price': product.Price} for product in all_products]
+            product_data = [{'Name': product.Name, 'ProductID': product.ProductID, 'ProducerID': product.ProducerID,
+                             'CategoryID': product.CategoryID, 'Price': product.Price} for product in all_products]
             products_df = pd.DataFrame(product_data)
             st.table(products_df)
         else:
@@ -173,7 +175,8 @@ def customer_crud_menu():
         all_customers = customer_controller.get_customers()
         print(all_customers)
         if all_customers:
-            customer_data = [{'Name': customer.Name, 'CustomerID': customer.CustomerID, 'Email': customer.Email, 'Phone': customer.Phone} for customer in all_customers]
+            customer_data = [{'Name': customer.Name, 'CustomerID': customer.CustomerID, 'Email': customer.Email,
+                              'Phone': customer.Phone} for customer in all_customers]
             customer_df = pd.DataFrame(customer_data)
             st.table(customer_df)
         else:
@@ -205,7 +208,7 @@ def producer_crud_menu():
             }
             print(producer_data)
             producer_id = producer_controller.producer_repository.add_producer(producer_data)
-            st.success(f"Producer added successfully with ID: {producer_id}")
+            st.success(f"Producer added successfully with ID: {producer_name}")
 
     elif crud_menu_producer == 'Update Producer':
         st.subheader('Update Producer Section')
@@ -236,7 +239,9 @@ def producer_crud_menu():
         all_producers = producer_controller.get_producers()
         print(all_producers)
         if all_producers:
-            producer_data = [{'Name': producer.ProducerName, 'Location': producer.ProducerLocation, 'ID': producer.ProducerID} for producer in all_producers]
+            producer_data = [
+                {'Name': producer.ProducerName, 'Location': producer.ProducerLocation, 'ID': producer.ProducerID} for
+                producer in all_producers]
             producer_df = pd.DataFrame(producer_data)
             st.table(producer_df)
         else:
@@ -306,11 +311,15 @@ def promotion_crud_menu():
         all_promotions = promotion_controller.get_promotions()
         print(all_promotions)
         if all_promotions:
-            promotion_data = [{'Name': promotion.PromotionName, 'ID': promotion.PromotionID, 'Start Date': promotion.StartDate, 'End Date': promotion.EndDate, 'Discount Percentage': promotion.DiscountPercentage} for promotion in all_promotions]
+            promotion_data = [
+                {'Name': promotion.PromotionName, 'ID': promotion.PromotionID, 'Start Date': promotion.StartDate,
+                 'End Date': promotion.EndDate, 'Discount Percentage': promotion.DiscountPercentage} for promotion in
+                all_promotions]
             promotion_df = pd.DataFrame(promotion_data)
             st.table(promotion_df)
         else:
             st.info("No promotions found.")
+
 
 ####################################################################################
 
@@ -385,7 +394,10 @@ def sale_crud_menu():
         all_sales = sale_controller.get_sales()
         print(all_sales)
         if all_sales:
-            promotion_data = [{'ID': sale.SaleID, 'Quantity': sale.Quantity, 'ProductID': sale.ProductID, 'Amount': sale.Amount, 'CustomerID': sale.CustomerID, 'PromotionID': sale.PromotionID, 'Date': sale.Date} for sale in all_sales]
+            promotion_data = [
+                {'ID': sale.SaleID, 'Quantity': sale.Quantity, 'ProductID': sale.ProductID, 'Amount': sale.Amount,
+                 'CustomerID': sale.CustomerID, 'PromotionID': sale.PromotionID, 'Date': sale.Date} for sale in
+                all_sales]
             sales_df = pd.DataFrame(promotion_data)
             st.table(sales_df)
         else:
@@ -486,7 +498,8 @@ def analytics_menu():
                                                  columns=['Date', 'ProductName', 'TotalQuantitySold'])
             product_popularity_df['TotalQuantitySold'] = pd.to_numeric(product_popularity_df['TotalQuantitySold'])
             product_popularity_df.set_index('Date', inplace=True)
-            st.bar_chart(product_popularity_df, x='ProductName', y='TotalQuantitySold', use_container_width=True, color='#A932FF')
+            st.bar_chart(product_popularity_df, x='ProductName', y='TotalQuantitySold', use_container_width=True,
+                         color='#A932FF')
         else:
             st.info("No product popularity data found.")
 
@@ -501,7 +514,8 @@ def analytics_menu():
             category_popularity_df['TotalQuantitySold'] = pd.to_numeric(category_popularity_df['TotalQuantitySold'])
             category_popularity_df.set_index('Date', inplace=True)
 
-            st.bar_chart(category_popularity_df, x='CategoryName', y='TotalQuantitySold', use_container_width=True, color='#A932FF')
+            st.bar_chart(category_popularity_df, x='CategoryName', y='TotalQuantitySold', use_container_width=True,
+                         color='#A932FF')
         else:
             st.info("No category popularity data found.")
 
@@ -524,7 +538,8 @@ def analytics_menu():
         print(f"average_purchase_frequency_data{average_purchase_frequency_data}")
 
         if average_purchase_frequency_data:
-            st.write(f"Average Purchase Frequency on {average_purchase_frequency_data['Date']} is {average_purchase_frequency_data['AveragePurchaseFrequency']}")
+            st.write(
+                f"Average Purchase Frequency on {average_purchase_frequency_data['Date']} is {average_purchase_frequency_data['AveragePurchaseFrequency']}")
         else:
             st.info("No average purchase frequency data found.")
 
@@ -564,6 +579,5 @@ def analytics_menu():
             st.success(f"The effectiveness of Promotion {promotion_id} is ${promotion_effectiveness_data:.2f}")
         else:
             st.info("No promotion effectiveness data found.")
-
 
 ##################################################################################
